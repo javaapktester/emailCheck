@@ -9,7 +9,7 @@ numMessages = len(pop_conn.list()[1])
 for i in range(numMessages):
     text = ""
     for msg in pop_conn.retr(i+1)[1]:
-        text = text + msg + "\n"
+        text = text + str(msg) + "\n"
     p = FeedParser()
     p.feed(text)
     message = p.close()
