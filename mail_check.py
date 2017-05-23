@@ -13,11 +13,7 @@ for i in range(numMessages):
     p = FeedParser()
     p.feed(text)
     message = p.close()
-    print message['Message-ID']
-    print message['From']
-    print message['To']
-    print message['Bcc']
-
-    print message.get_payload()
+    
+    print(message.get_payload())
     
 pop_conn.quit()
