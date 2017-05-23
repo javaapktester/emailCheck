@@ -15,6 +15,6 @@ for i in range(numMessages):
     p.feed(text)
     message = p.close()
     
-    print(message.get_payload())
+    print(message)
     
 pop_conn.quit()
