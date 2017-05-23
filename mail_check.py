@@ -1,5 +1,6 @@
 #!/bin/python
 import poplib
+from email.parser import FeedParser
 
 pop_conn = poplib.POP3_SSL('pop.gmail.com', '995')
 pop_conn.user('javaapktester')
