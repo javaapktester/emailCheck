@@ -7,7 +7,7 @@ pop_conn.pass_('Avast2017!')
 
 numMessages = len(pop_conn.list()[1])
 for i in range(numMessages):
-    text = ''
+    text = ""
     for msg in pop_conn.retr(i+1)[1]:
         text = text + msg + "\n"
     p = FeedParser()
