@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/python3
 import poplib
 from email.parser import FeedParser
 
