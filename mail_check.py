@@ -14,7 +14,7 @@ for i in range(numMessages):
     p = FeedParser()
     p.feed(text)
     message = p.close()
-    
-    print(message)
+    print(message['Return-Path'])
+    print(message['Subject'])
     
 pop_conn.quit()
