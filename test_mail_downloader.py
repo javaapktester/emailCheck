@@ -13,7 +13,7 @@ class GmailTest(object):
         self.connection = poplib.POP3_SSL('pop.gmail.com', 995)
         #self.connection.set_debuglevel(1)
         self.connection.user("javaapktester")
-        self.connection.pass_("Avast2017!")
+        self.connection.pass_("************")
 
         emails, total_bytes = self.connection.stat()
         print("{0} emails in the inbox, {1} bytes total".format(emails, total_bytes))
