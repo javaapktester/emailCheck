@@ -117,9 +117,11 @@ class GmailTest(object):
                     fp.write(part.get_payload(decode=1))
                     fp.close()
             # remove processed e-mail
-            self.connection.dele(i + 1)
+            #self.connection.dele(i + 1)
 
-        print('#####################################')
+            print('#####################################')
+
+        self.connection.quit()
 
 
 if __name__ == '__main__':
