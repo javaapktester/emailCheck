@@ -103,11 +103,15 @@ class GmailTest(object):
                         print(part.get_content_type())
 
                     if part.get_content_maintype() == 'multipart':
+                        if self.debug:
+                            print("maintype == multipart")
+                            print(part.get_payload())
                         continue
 
                     if part.get('Content-Disposition') is None:
                         if self.debug:
                             print("no content dispo")
+                            print(part.get_payload())
                         continue
 
                     filename = part.get_filename()
