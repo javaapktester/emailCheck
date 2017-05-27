@@ -116,6 +116,8 @@ class GmailTest(object):
                     fp = open(os.path.join(self.savedir, filename), 'wb')
                     fp.write(part.get_payload(decode=1))
                     fp.close()
+            # remove processed e-mail
+            self.connection.dele(i + 1)
 
         print('#####################################')
 
