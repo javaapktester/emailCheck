@@ -24,7 +24,7 @@ class GmailTest(object):
         else:
             self.jenPass = j_password
 
-        self.savedir = "./"
+        self.savedir = "/home/user/javaapktester/emailCheck"
         self.jenAddr = 'http://localhost:8080'
 
     def set_jenkins_server(self, address):
@@ -101,6 +101,7 @@ class GmailTest(object):
                 if return_path != '':
                     if self.debug:
                         print(part.get_content_type())
+
                     if part.get_content_maintype() == 'multipart':
                         continue
 
@@ -111,12 +112,12 @@ class GmailTest(object):
 
                     filename = part.get_filename()
                     if not (filename): filename = "test.txt"
-                    print(filename)
+                    print("Filename: " + str(filename))
 
                     fp = open(os.path.join(self.savedir, filename), 'wb')
                     fp.write(part.get_payload(decode=1))
                     fp.close()
-            # remove processed e-mail
+            # remove processed e-mail, for sanity of the mailbox, I suggest to uncomment next line, but it is not needed
             #self.connection.dele(i + 1)
 
             print('#####################################')
