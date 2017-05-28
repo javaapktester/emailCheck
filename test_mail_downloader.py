@@ -4,6 +4,7 @@ import poplib
 import email
 import os
 import jenkins
+import time
 import argparse
 
 
@@ -33,19 +34,14 @@ class GmailTest(object):
     def create_jenkins_job(self, email_addr, path):
         """
         creating jenkins job for aapt and cleanup job
-
-        inspiration: https://python-jenkins.readthedocs.io/en/latest/examples.html
-
         :param email_addr: e-mail address of return address in the e-mail
         :param path: path to apk file
         """
         server = jenkins.Jenkins(self.jenAddr, username=self.jenUser, password=self.jenPass)
-        # TODO: change 'api-test'
         # TODO: deal with priorities
-        server.build_job('api-test', {'email': email_addr, 'pathToApk': path})
+        server.build_job('apk_parser', {'email': email_addr, 'apkPath': path})
 
     def test_save_attach(self):
-        # TODO: check for subject and return address only in first part of the mail.
         # TODO: add downloading attachment from gdrive
 
         self.connection = poplib.POP3_SSL('pop.gmail.com', 995)
@@ -81,31 +77,33 @@ class GmailTest(object):
             for part in str_message.walk():
                 part_num += 1
                 if part_num == 1:
-                    p = email.parser.FeedParser()
-                    p.feed(str(part))
-                    header = p.close()
-                    if 'Subject' in header.keys():
-                        print(header['Subject'])
-                        if header['Subject'].upper() == 'APK':
-                            if 'Return-Path' in header.keys():
-                                return_path = header['Return-Path']
-                                print(header['Return-Path'])
-                            elif 'From:' in header.keys():
-                                print('Unable to get, using from value instead')
-                                return_path = header['From']
-                                print(header['From'])
-                            else:
-                                print('Unable to parse return address.')
-                                print(part)
+                    if part.get('Subject', '') == '':
+                        if self.debug:
+                            print("Haven't found the Subject keeping trying.")
+                        part_num -= 1
+                        continue
+
+                    if part.get('Subject').upper() == 'APK':
+                        if part.get('Return-Path', '') != '':
+                            return_path = part.get('Return-Path')
+                            print(return_path)
+                        else:
+                            if self.debug:
+                                print('Unable to get return-path, using from value instead')
+                            if part.get('From', '') == '':
+                                if self.debug:
+                                    print('Unable to parse return address.')
+                                    print(part)
                                 break
+                            else:
+                                return_path = part.get('From')
+                                print(return_path)
+
                 if return_path != '':
                     if self.debug:
                         print(part.get_content_type())
 
                     if part.get_content_maintype() == 'multipart':
-                        if self.debug:
-                            print("maintype == multipart")
-                            print(part.get_payload())
                         continue
 
                     if part.get('Content-Disposition') is None:
@@ -115,12 +113,22 @@ class GmailTest(object):
                         continue
 
                     filename = part.get_filename()
-                    if not (filename): filename = "test.txt"
-                    print("Filename: " + str(filename))
+                    if os.path.splitext(filename)[-1] == '.apk':
+                        print("Filename: " + str(filename))
+                    else:
+                        if self.debug:
+                            print('Attached file is not .apk')
+                        continue
 
-                    fp = open(os.path.join(self.savedir, filename), 'wb')
+                    dir_path = os.path.join(self.savedir, time.ctime())
+                    os.mkdir(dir_path)
+                    path = os.path.join(dir_path, filename)
+
+                    fp = open(path, 'wb')
                     fp.write(part.get_payload(decode=1))
                     fp.close()
+
+                    self.create_jenkins_job(return_path, path)
             # remove processed e-mail, for sanity of the mailbox, I suggest to uncomment next line, but it is not needed
             #self.connection.dele(i + 1)
 
