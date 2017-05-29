@@ -103,5 +103,5 @@ if __name__ == "__main__":
     parser_group.add_argument("-v", "--verbose", action="store_true", help="show debug output")
 
     args = parser.parse_args()
-    a = ApkParser(username=args.usrname, password=args.password, apk=args.apk, resp_addr=args.resp, debug=args.verbose)
+    a = ApkParser(username=args.username, password=args.password, apk=args.apk, resp_addr=args.resp, debug=args.verbose)
     a.pars_sdk()
