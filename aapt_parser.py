@@ -54,9 +54,9 @@ class ApkParser(object):
         server.login(self.username, self.password)
         message = 'Subject: {}\n\n{}'.format(subject, text)
         if str(self.username).find('@gmail.com') > -1:
-            server.sendmail(self.username, self.resp_addr, text)
+            server.sendmail(self.username, self.resp_addr, message)
         else:
-            server.sendmail(self.username+'@gmail.com', self.resp_addr, text)
+            server.sendmail(self.username+'@gmail.com', self.resp_addr, message)
 
     def pars_sdk(self):
         # run aapt on given path
