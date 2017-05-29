@@ -1,6 +1,5 @@
 import smtplib
 import subprocess
-import os
 import argparse
 
 
@@ -17,17 +16,24 @@ class RespContext(object):
     # TODO: correct the output
     def __str__(self):
         return '''
-        Min SDK: 
-        Target SDK:
-        Permissions:
-        Package name:
-        App version:
-        Launchable-activity:
-        Application-label:
-        '''
+        Min SDK: {}
+        Target SDK: {}
+        Permissions: {}
+        Package name: {}
+        App version: {}
+        Launchable-activity: {}
+        Application-label: {}
+        '''.format(self.min_sdk, self.target_sdk, self.str_permissions(), self.name, self.app_version,
+                   self.launch_activity, self.app_label)
 
     def set_permissions(self, new_permission):
         self.permissions.append(new_permission)
+
+    def str_permissions(self):
+        x = ''
+        for perm in self.permissions:
+            x = x+'    '+perm+'\n'
+        return x
 
 
 class ApkParser(object):
@@ -89,11 +95,12 @@ class ApkParser(object):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='For given e-mail and path to apk file, it will run aapt for given '
                                                  'apk and send parsed report to the given e-mail address.')
-    parser.add_argument("-u", "--username", type=str, help="google account login name")
-    parser.add_argument("-p", "--password", type=str, help="google account password")
-    parser.add_argument("-a", "--apk", type=str, help="apk file to be parsed.")
-    parser.add_argument("-r", "--resp", type=str, help="e-mail address, where to send the parsed information")
-    parser.add_argument("-v", "--verbose", action="store_true", help="show debug output")
+    parser_group = parser.add_argument_group('required named arguments')
+    parser_group.add_argument("-u", "--username", type=str, help="google account login name", required=True)
+    parser_group.add_argument("-p", "--password", type=str, help="google account password", required=True)
+    parser_group.add_argument("-a", "--apk", type=str, help="apk file to be parsed.", required=True)
+    parser_group.add_argument("-r", "--resp", type=str, help="e-mail address, where to send the parsed information", required=True)
+    parser_group.add_argument("-v", "--verbose", action="store_true", help="show debug output")
 
     args = parser.parse_args()
     a = ApkParser(username=args.usrname, password=args.password, apk=args.apk, resp_addr=args.resp, debug=args.verbose)
