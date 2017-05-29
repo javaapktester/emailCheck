@@ -1,5 +1,7 @@
 import smtplib
 import subprocess
+import shutil
+import os
 import argparse
 
 
@@ -92,6 +94,7 @@ class ApkParser(object):
             if self.debug:
                 print(e.output)
             self.send_answer("Not valid APK.")
+        shutil.rmtree(os.path.dirname(self.apk))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='For given e-mail and path to apk file, it will run aapt for given '
