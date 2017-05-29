@@ -18,13 +18,13 @@ class RespContext(object):
         return '''
         Min SDK: {}
         Target SDK: {}
-        Permissions: {}
         Package name: {}
         App version: {}
         Launchable-activity: {}
         Application-label: {}
-        '''.format(self.min_sdk, self.target_sdk, self.str_permissions(), self.name, self.app_version,
-                   self.launch_activity, self.app_label)
+        Permissions: {}
+        '''.format(self.min_sdk, self.target_sdk, self.name, self.app_version,
+                   self.launch_activity, self.app_label, self.str_permissions())
 
     def set_permissions(self, new_permission):
         self.permissions.append(new_permission)
@@ -91,6 +91,7 @@ class ApkParser(object):
         except subprocess.CalledProcessError as e:
             if self.debug:
                 print(e.output)
+            self.send_answer("Not valid APK.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='For given e-mail and path to apk file, it will run aapt for given '
