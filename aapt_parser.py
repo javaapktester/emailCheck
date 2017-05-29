@@ -15,13 +15,9 @@ class RespContext(object):
         self.launch_activity = ''
         self.app_label = ''
         self.file_name = ''
-        self.email = ''
 
     def __str__(self):
-        return '''
-        \\
-        From: {}
-        Subject: RE: APK
+        return ''' 
         Filename: {}
         Min SDK: {}
         Target SDK: {}
@@ -30,7 +26,7 @@ class RespContext(object):
         Launchable-activity: {}
         Application-label: {}
         Permissions: {}
-        '''.format(self.email + '@gmail.com', self.file_name, self.min_sdk, self.target_sdk, self.name, self.app_version,
+        '''.format(self.file_name, self.min_sdk, self.target_sdk, self.name, self.app_version,
                    self.launch_activity, self.app_label, self.str_permissions())
 
     def set_permissions(self, new_permission):
@@ -51,11 +47,12 @@ class ApkParser(object):
         self.resp_addr = resp_addr
         self.debug = debug
 
-    def send_answer(self, text):
+    def send_answer(self, text, subject):
         server = smtplib.SMTP('smtp.gmail.com:587')
         server.ehlo()
         server.starttls()
         server.login(self.username, self.password)
+        message = 'Subject: {}\n\n{}'.format(subject, text)
         if str(self.username).find('@gmail.com') > -1:
             server.sendmail(self.username, self.resp_addr, text)
         else:
@@ -90,9 +87,8 @@ class ApkParser(object):
                     continue
 
             resp_data.file_name = os.path.basename(self.apk)
-            resp_data.email = self.username
             # send answer
-            self.send_answer(str(resp_data))
+            self.send_answer(str(resp_data), 'Re:APK')
         # catch error
         except subprocess.CalledProcessError as e:
             if self.debug:
