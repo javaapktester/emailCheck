@@ -60,7 +60,7 @@ class ApkParser(object):
     def pars_sdk(self):
         # run aapt on given path
         try:
-            output = subprocess.check_output(["aapt", "dump", "badging", self.apk])
+            output = subprocess.check_output(["aapt", "dump", "badging", "\"", self.apk,"\""])
             resp_data = RespContext()
             # parse output
             for line in output.decode("utf-8").splitlines():
