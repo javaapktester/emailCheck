@@ -15,9 +15,9 @@ class RespContext(object):
         self.launch_activity = ''
         self.app_label = ''
 
-    # TODO: correct the output
     def __str__(self):
         return '''
+        Subject: RE: APK
         Min SDK: {}
         Target SDK: {}
         Package name: {}
@@ -47,7 +47,6 @@ class ApkParser(object):
         self.debug = debug
 
     def send_answer(self, text):
-        # TODO add subject
         server = smtplib.SMTP('smtp.gmail.com:587')
         server.ehlo()
         server.starttls()
@@ -87,8 +86,6 @@ class ApkParser(object):
 
             # send answer
             self.send_answer(str(resp_data))
-            # delete dir
-            # TODO: delete the dir
         # catch error
         except subprocess.CalledProcessError as e:
             if self.debug:
