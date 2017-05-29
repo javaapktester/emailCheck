@@ -39,7 +39,7 @@ class GmailTest(object):
         """
         server = jenkins.Jenkins(self.jenAddr, username=self.jenUser, password=self.jenPass)
         # TODO: deal with priorities
-        server.build_job('apk_parser', {'email': email_addr, 'apkPath': path})
+        server.build_job('apk_parser', {'email': email_addr[1:-1], 'apkPath': path})
 
     def test_save_attach(self):
         # TODO: add downloading attachment from gdrive
