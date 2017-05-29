@@ -121,7 +121,7 @@ class GmailTest(object):
 
                     dir_path = os.path.join(self.savedir, str(time.time()).replace(".", ""))
                     os.mkdir(dir_path)
-                    path = os.path.join(dir_path, filename)
+                    path = os.path.join(dir_path, filename.replace(' ', '_'))
 
                     fp = open(path, 'wb')
                     fp.write(part.get_payload(decode=1))

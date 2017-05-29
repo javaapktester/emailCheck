@@ -94,6 +94,7 @@ class ApkParser(object):
             if self.debug:
                 print(e.output)
             self.send_answer("Not valid APK.")
+
         shutil.rmtree(os.path.dirname(self.apk))
 
 if __name__ == "__main__":
