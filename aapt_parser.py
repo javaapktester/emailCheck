@@ -52,7 +52,7 @@ class ApkParser(object):
         server.ehlo()
         server.starttls()
         server.login(self.username, self.password)
-        message = 'To: {}\n\nSubject: {}\n\n{}'.format(self.resp_addr, subject, text)
+        message = 'To: {}\nSubject: {}\n\n{}'.format(self.resp_addr, subject, text)
         if str(self.username).find('@gmail.com') > -1:
             server.sendmail(self.username, self.resp_addr, message)
         else:
