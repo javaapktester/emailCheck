@@ -14,10 +14,15 @@ class RespContext(object):
         self.app_version = ''
         self.launch_activity = ''
         self.app_label = ''
+        self.file_name = ''
+        self.email = ''
 
     def __str__(self):
         return '''
+        \\
+        From: {}
         Subject: RE: APK
+        Filename: {}
         Min SDK: {}
         Target SDK: {}
         Package name: {}
@@ -25,7 +30,7 @@ class RespContext(object):
         Launchable-activity: {}
         Application-label: {}
         Permissions: {}
-        '''.format(self.min_sdk, self.target_sdk, self.name, self.app_version,
+        '''.format(self.email + '@gmail.com', self.file_name, self.min_sdk, self.target_sdk, self.name, self.app_version,
                    self.launch_activity, self.app_label, self.str_permissions())
 
     def set_permissions(self, new_permission):
@@ -84,6 +89,8 @@ class ApkParser(object):
                     resp_data.launch_activity = split_line[1]
                     continue
 
+            resp_data.file_name = os.path.basename(self.apk)
+            resp_data.email = self.username
             # send answer
             self.send_answer(str(resp_data))
         # catch error
